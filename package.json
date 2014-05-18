@@ -1,9 +1,9 @@
 {
-  "title": "Chainy",
-  "name": "chainy",
+  "title": "Chainy Core",
+  "name": "chainy-core",
   "version": "0.2.0",
   "description": "Perhaps the most awesome way of interacting with data using a chainable API",
-  "homepage": "https://github.com/chainyjs/chainy",
+  "homepage": "https://github.com/chainyjs/chainy-core",
   "license": {
     "type": "MIT"
   },
@@ -36,11 +36,11 @@
     "Benjamin Lupton <b@lupton.cc> (https://github.com/balupton)"
   ],
   "bugs": {
-    "url": "https://github.com/chainyjs/chainy/issues"
+    "url": "https://github.com/chainyjs/chainy-core/issues"
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/chainyjs/chainy.git"
+    "url": "http://github.com/chainyjs/chainy-core.git"
   },
   "engines": {
     "node": ">=0.4"
