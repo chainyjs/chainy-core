@@ -54,7 +54,7 @@ Perhaps the most awesome way of interacting with data using a chainable API
 
 ``` javascript
 // chainy install set map swap
-var Chainy = require('chainy').subclass().require('set', 'map', 'swap')
+var Chainy = require('chainy-core').subclass().require('set', 'map', 'swap')
 Chainy.create()
 	.set(['some', 'data'])
 	.map(function(item, next){
