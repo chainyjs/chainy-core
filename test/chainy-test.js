@@ -23,7 +23,7 @@
 		it("should pass when attempting to extend a child class", function(){
 			var extension = function(){}
 			var MyChainy = Chainy.subclass().addExtension('test', 'utility', extension)
-			expect(MyChainy.prototype.test).to.eql(extension)
+			expect(MyChainy.prototype.test).to.equal(extension)
 		})
 
 		it("should handle errors gracefully", function(next){
@@ -33,8 +33,8 @@
 				})
 				.oops()
 				.done(function(err, chainData){
-					expect(err.message).to.eql('deliberate failure')
-					expect(chainData).to.eql(null)
+					expect(err.message).to.equal('deliberate failure')
+					expect(chainData).to.equal(null)
 					return next()
 				})
 		})
@@ -46,33 +46,46 @@
 				})
 				.set('some data')
 				.done(function(err, chainData){
-					expect(err).to.eql(null)
-					expect(chainData).to.eql('some data')
-					expect(chainData).to.eql(this.data)
+					expect(err).to.equal(null)
+					expect(chainData).to.equal('some data')
+					expect(chainData).to.equal(this.data)
 					return next()
 				})
 		})
 
+		it("should not add an extension twice", function(){
+			var extension = function(data){
+				this.data = data
+			}
+			var chain = Chainy.create()
+			chain.addExtension('set', 'action', extension)
+			var firstAdd = chain.set
+			chain.addExtension('set', 'action', extension)
+			var secondAdd = chain.set
+			expect(firstAdd).to.be.a('function')
+			expect(firstAdd).to.equal(secondAdd) // strict
+		})
+
 		it("should inherit parent plugins", function(next){
-			var top = Chainy.subclass()
+			var subclass = Chainy.subclass()  // class
 				.addExtension('set', 'action', function(data){
 					this.data = data
 				})
-			var parent = top.create()
+			var parent = subclass.create()  // instance
 				.addExtension('capitalize', 'action', function(){
 					this.data = String(this.data).toUpperCase()
 				})
-			var child = parent.create()
+			var child = parent.create()  // instance
 				.set('some data')
 				.capitalize()
 				.done(function(err, chainData){
-					expect(child.parent, "child parent is the parent chain instance").to.eql(parent)
-					expect(parent.parent, "parent parent doens't exist").to.eql(null)
-					//expect(child.klass, "child klass is the subclass").to.eql(top)
-					//expect(parent.klass, "parent klass is the subclass").to.eql(top)
-					expect(err).to.eql(null)
-					expect(chainData, 'callback data is this.data').to.eql(this.data)
-					expect(chainData, 'data is correct').to.eql('SOME DATA')
+					expect(child.parent, "child parent is the parent chain instance").to.equal(parent)
+					expect(parent.parent, "parent parent doens't exist").to.equal(null)
+					//expect(child.klass, "child klass is the subclass").to.equal(subclass)
+					//expect(parent.klass, "parent klass is the subclass").to.equal(subclass)
+					expect(err).to.equal(null)
+					expect(chainData, 'callback data is this.data').to.equal(this.data)
+					expect(chainData, 'data is correct').to.equal('SOME DATA')
 					return next()
 				})
 		})
