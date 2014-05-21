@@ -53,6 +53,15 @@
 				})
 		})
 
+		it("should not attempt to require the done method", function(next){
+			Chainy.subclass().subclass().subclass().require('done')
+				.create().require('done')
+				.done(function(err, chainData){
+					expect(err).to.equal(null)
+					return next()
+				})
+		})
+
 		it("should not add an extension twice", function(){
 			var extension = function(data){
 				this.data = data
@@ -89,5 +98,8 @@
 					return next()
 				})
 		})
+
+		// TODO:
+		// Add tests for different require argument conventions, array, string, split string
 	});
 })()
