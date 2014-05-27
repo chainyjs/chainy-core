@@ -27,12 +27,13 @@
 		})
 
 		it("should handle errors gracefully", function(next){
-			Chainy.create()
-				.addExtension('oops', 'action', function(){
+			var chain = Chainy.create()
+				.addExtension('myoops', 'action', function(){
 					throw new Error('deliberate failure')
 				})
-				.oops()
+				.myoops()
 				.done(function(err, chainData){
+					expect(chain).to.equal(this)
 					expect(err.message).to.equal('deliberate failure')
 					expect(chainData).to.equal(null)
 					return next()
@@ -40,12 +41,13 @@
 		})
 
 		it("should work well", function(next){
-			Chainy.create()
-				.addExtension('set', 'action', function(data){
-					this.data = data
+			var chain = Chainy.create()
+				.addExtension('myset', 'action', function(value, newValue){
+					return newValue
 				})
-				.set('some data')
+				.myset('some data')
 				.done(function(err, chainData){
+					expect(chain).to.equal(this)
 					expect(err).to.equal(null)
 					expect(chainData).to.equal('some data')
 					expect(chainData).to.equal(this.data)
@@ -54,9 +56,10 @@
 		})
 
 		it("should not attempt to require the done method", function(next){
-			Chainy.subclass().subclass().subclass().require('done')
+			var chain = Chainy.subclass().subclass().subclass().require('done')
 				.create().require('done')
-				.done(function(err, chainData){
+				.done(function(err){
+					expect(chain).to.equal(this)
 					expect(err).to.equal(null)
 					return next()
 				})
@@ -67,27 +70,28 @@
 				this.data = data
 			}
 			var chain = Chainy.create()
-			chain.addExtension('set', 'action', extension)
-			var firstAdd = chain.set
-			chain.addExtension('set', 'action', extension)
-			var secondAdd = chain.set
+			chain.addExtension('myset', 'action', extension)
+			var firstAdd = chain.myset
+			chain.addExtension('myset', 'action', extension)
+			var secondAdd = chain.myset
 			expect(firstAdd).to.be.a('function')
 			expect(firstAdd).to.equal(secondAdd) // strict
 		})
 
 		it("should inherit parent plugins", function(next){
 			var subclass = Chainy.subclass()  // class
-				.addExtension('set', 'action', function(data){
-					this.data = data
+				.addExtension('myset', 'action', function(value, newValue){
+					return newValue
 				})
 			var parent = subclass.create()  // instance
-				.addExtension('capitalize', 'action', function(){
-					this.data = String(this.data).toUpperCase()
+				.addExtension('mycapitalize', 'action', function(value){
+					return String(value).toUpperCase()
 				})
 			var child = parent.create()  // instance
-				.set('some data')
-				.capitalize()
+				.myset('some data')
+				.mycapitalize()
 				.done(function(err, chainData){
+					expect(child).to.equal(this)
 					expect(child.parent, "child parent is the parent chain instance").to.equal(parent)
 					expect(parent.parent, "parent parent doens't exist").to.equal(null)
 					//expect(child.klass, "child klass is the subclass").to.equal(subclass)
