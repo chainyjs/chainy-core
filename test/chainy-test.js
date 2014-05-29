@@ -1,6 +1,4 @@
-(function(){
-	"use strict";
-
+(function(){"use strict";
 	// Import
 	var expect = require('chai').expect,
 		joe = require('joe')
@@ -10,12 +8,12 @@
 		var Chainy = require('../')
 
 		it("should fail when attempting to extend the base class", function(){
-			var err;
+			var err = null
 			try {
 				Chainy.addExtension('test', 'action', function(){})
 			}
 			catch (_err) {
-				err = _err;
+				err = _err
 			}
 			expect(err && err.message).to.contain('frozen')
 		})
@@ -105,5 +103,5 @@
 
 		// TODO:
 		// Add tests for different require argument conventions, array, string, split string
-	});
+	})
 })()
