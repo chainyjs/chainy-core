@@ -20,13 +20,16 @@
   },
   "keywords": [
     "flow",
-    "control",
     "async",
     "sync",
     "tasks",
+    "task",
+    "taskgroup",
     "batch",
     "concurrency",
-    "data"
+    "data",
+    "pipeline",
+    "workflow"
   ],
   "author": "2014+ Bevry Pty Ltd <us@bevry.me> (http://bevry.me)",
   "maintainers": [
