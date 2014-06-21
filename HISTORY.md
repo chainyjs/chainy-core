@@ -1,7 +1,7 @@
 # History
 
-## v1.0.0 June X, 2014
-- First mature API version, first publicised release, enjoy!
+## v1.0.0 June 21, 2014
+- API is now mature for public use, enjoy!
 
 ## v0.4.0 May 21, 2014
 - Utilities are now also added to directly to classes, instead of just their prototypes
