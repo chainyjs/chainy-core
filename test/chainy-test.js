@@ -1,5 +1,4 @@
 "use strict";
-
 // Import
 var expect = require('chai').expect,
 	joe = require('joe')
@@ -95,7 +94,7 @@ joe.describe('chainy', function(describe,it){
 				expect(parent.parent, "parent parent doens't exist").to.equal(null)
 				//expect(child.klass, "child klass is the subclass").to.equal(subclass)
 				//expect(parent.klass, "parent klass is the subclass").to.equal(subclass)
-				expect(err).to.equal(null)
+				expect(err, 'no error').to.equal(null)
 				expect(chainData, 'callback data is this.data').to.equal(this.data)
 				expect(chainData, 'data is correct').to.equal('SOME DATA')
 				return next()
