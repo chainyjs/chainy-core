@@ -1,5 +1,12 @@
 # History
 
+## v1.1.0 June 23, 2014
+- Added tomdoc inline documentation, indicating what is internal and public methods, properties, and options
+- Changed some of the internal functionality
+- Plugins can now also do `module.exports.extension = {method, type, ...}`, which is useful for existing modules that want to become chainy extensions, or similar situations where the top level export is not a chainy plugin method
+- Plugins can now also do `module.exports.extensionOptions = {}`, which is useful when the top level export is a chainy plugin, but you also want to customise other options of it than just the `extensionType`
+- Fixed mixin helper
+
 ## v1.0.0 June 21, 2014
 - API is now mature for public use, enjoy!
 
