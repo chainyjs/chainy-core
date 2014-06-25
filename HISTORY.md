@@ -1,5 +1,17 @@
 # History
 
+## v1.2.0 June 25, 2014
+- Added `klass` and `parent` options to `Chainy.create(opts)`
+	- Useful for creating standalone action plugins that have sub chains:
+
+		``` javascript
+		this.create() // ...
+		// becomes
+		require('chainy-core').create({parent:this}) // ...
+		```
+
+- Added `Chainy.isChainyInstance(chain)` method
+
 ## v1.1.0 June 23, 2014
 - Added tomdoc inline documentation, indicating what is internal and public methods, properties, and options
 - Changed some of the internal functionality
