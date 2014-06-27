@@ -19,9 +19,27 @@ joe.describe('chainy', function(describe,it){
 	})
 
 	it("should pass when attempting to extend a child class", function(){
-		var extension = function(){}
-		var MyChainy = Chainy.subclass().addExtension('test', 'utility', extension)
-		expect(MyChainy.prototype.test).to.equal(extension)
+		var extension = function(value, newVaue){}
+		
+		var MyChainy = Chainy.subclass()
+			.addExtension('myutility', 'utility', extension)
+			.addExtension('myaction', 'action', extension)
+		
+		expect(MyChainy.prototype.myutility, 'utility by name').to.equal(extension)
+		expect(MyChainy.prototype.myaction, 'action by name').to.be.a('function')
+	})
+
+	it("should handle aliases correctly", function(){
+		var extension = function(value, newVaue){}
+		
+		var MyChainy = Chainy.subclass()
+			.addExtension('myutility', ['myUtility'], 'utility', extension)
+			.addExtension('myaction', ['myAction'], 'action', extension)
+
+		expect(MyChainy.prototype.myutility, 'utility by name').to.equal(extension)
+		expect(MyChainy.prototype.myUtility, 'utility by alias').to.equal(extension)
+		expect(MyChainy.prototype.myaction, 'action by name').to.be.a('function')
+		expect(MyChainy.prototype.myAction, 'action by alias').to.be.a('function')
 	})
 
 	it("should handle errors gracefully", function(next){
@@ -54,7 +72,8 @@ joe.describe('chainy', function(describe,it){
 	})
 
 	it("should not attempt to require the done method", function(next){
-		var chain = Chainy.subclass().subclass().subclass().require('done')
+		var chain = Chainy
+			.subclass().subclass().subclass().require('done')
 			.create().require('done')
 			.done(function(err){
 				expect(chain).to.equal(this)
@@ -82,21 +101,33 @@ joe.describe('chainy', function(describe,it){
 				return newValue
 			})
 		var parent = subclass.create()  // instance
-			.addExtension('mycapitalize', 'action', function(value){
+			.addExtension('mycapitalize', ['myCapitalize'], 'action', function(value){
 				return String(value).toUpperCase()
 			})
 		var child = parent.create()  // instance
 			.myset('some data')
 			.mycapitalize()
+			.action(function(chainData){
+				expect(chainData, 'data is correct').to.equal('SOME DATA')
+				return chainData.toLowerCase() // convert back to lowercase
+			})
+
+			.myCapitalize()
+			.action(function(chainData){
+				expect(chainData, 'data is correct').to.equal('SOME DATA')
+				// no return value, so let's check that the chain data remains upper case
+			})
+
 			.done(function(err, chainData){
+				expect(err, 'no error').to.equal(null)
+				expect(chainData, 'data is correct').to.equal('SOME DATA')
+				expect(chainData, 'callback data is this.data').to.equal(this.data)
+
 				expect(child).to.equal(this)
 				expect(child.parent, "child parent is the parent chain instance").to.equal(parent)
 				expect(parent.parent, "parent parent doens't exist").to.equal(null)
 				//expect(child.klass, "child klass is the subclass").to.equal(subclass)
 				//expect(parent.klass, "parent klass is the subclass").to.equal(subclass)
-				expect(err, 'no error').to.equal(null)
-				expect(chainData, 'callback data is this.data').to.equal(this.data)
-				expect(chainData, 'data is correct').to.equal('SOME DATA')
 				return next()
 			})
 	})

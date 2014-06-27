@@ -1,5 +1,9 @@
 # History
 
+## v1.3.0 June 27, 2014
+- Added support for the extension option: `aliases`
+- Fixed undefined action results over-writing chain data, undefined action results are discarded
+
 ## v1.2.0 June 25, 2014
 - Added `klass` and `parent` options to `Chainy.create(opts)`
 	- Useful for creating standalone action plugins that have sub chains:
