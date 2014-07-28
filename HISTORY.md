@@ -1,5 +1,8 @@
 # History
 
+## v1.3.2 July 28, 2014
+- Support use case where `aliases` option is a string instead of an array
+
 ## v1.3.1 June 27, 2014
 - Fixed `method.extensionOptions` parsing (never actually worked)
 

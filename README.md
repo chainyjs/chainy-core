@@ -39,7 +39,7 @@ Perhaps the most awesome way of interacting with data using a chainable API
 ### [Browserify](http://browserify.org/)
 - Use: `require('chainy-core')`
 - Install: `npm install --save chainy-core`
-- CDN URL: `//wzrd.in/bundle/chainy-core@1.3.1`
+- CDN URL: `//wzrd.in/bundle/chainy-core@1.3.2`
 
 ### [Ender](http://ender.jit.su/)
 - Use: `require('chainy-core')`
