@@ -1,5 +1,23 @@
 # History
 
+## v1.4.0 July 28, 2014
+- A few changes about how extension inheritance works to make it simpler and more robust
+	- Extensions are now explicitly added to each child class and child instance (instead of implicitly inherited from the prototype tree)
+	- Extensions are now only instantiated by default on child instances, instead of both child instances and child classes as before
+	- Extensions are no longer added to the prototype of a child class by default
+	- Where extensions are added can be changed by setting the `applyTo` extension option to include where you would like the extension to apply to, valid options are `['instance', 'class', 'prototype']`, default option is `['instance']`
+- Class and instance trees are now more robust (especially class trees)
+- `mixin` method now supports `options` argument that accepts the `applyTo` property, defaults to `['instance', 'class', 'prototype']` to maintain backwards compatible behaviour
+- Now throws an error when a class prototype method is being overwritten by an extension
+	- If you desire to overwrite a class prototype method, then use the `custom` extension type, and perform the overwrite manually by using the `mixin` method (see the `autoinstall` plugin for an example of this)
+- Now works when `chainy-core` is npm linked
+ 	- This is done by now using the parent module's lookup paths, instead of the chainy module's lookup paths
+- Failed requires now provides more information about why the require could have failed
+- Notes
+	- Use `var chain = Chainy.create()` instead of `var chain = new Chainy()`
+	- Use `Chainy.subclass(...)` instead of `class MyChainy extends Chainy`
+	- This is because the `create` and `subclass` methods perform some operations to maintain the tree (required for extension inheritance) that cannot be replicated via the native counterparts. If this is an issue for you, then let us know via the GitHub Issue tracker.
+
 ## v1.3.2 July 28, 2014
 - Support use case where `aliases` option is a string instead of an array
 

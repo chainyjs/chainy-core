@@ -20,26 +20,28 @@ joe.describe('chainy', function(describe,it){
 
 	it("should pass when attempting to extend a child class", function(){
 		var extension = function(value, newVaue){}
-		
-		var MyChainy = Chainy.subclass()
+
+		var chain = Chainy.subclass()
 			.addExtension('myutility', 'utility', extension)
 			.addExtension('myaction', 'action', extension)
-		
-		expect(MyChainy.prototype.myutility, 'utility by name').to.equal(extension)
-		expect(MyChainy.prototype.myaction, 'action by name').to.be.a('function')
+			.create()
+
+		expect(chain.myutility, 'utility by name').to.equal(extension)
+		expect(chain.myaction, 'action by name').to.be.a('function')
 	})
 
 	it("should handle aliases correctly", function(){
 		var extension = function(value, newVaue){}
-		
-		var MyChainy = Chainy.subclass()
+
+		var chain = Chainy.subclass()
 			.addExtension('myutility', ['myUtility'], 'utility', extension)
 			.addExtension('myaction', ['myAction'], 'action', extension)
+			.create()
 
-		expect(MyChainy.prototype.myutility, 'utility by name').to.equal(extension)
-		expect(MyChainy.prototype.myUtility, 'utility by alias').to.equal(extension)
-		expect(MyChainy.prototype.myaction, 'action by name').to.be.a('function')
-		expect(MyChainy.prototype.myAction, 'action by alias').to.be.a('function')
+		expect(chain.myutility, 'utility by name').to.equal(extension)
+		expect(chain.myUtility, 'utility by alias').to.equal(extension)
+		expect(chain.myaction, 'action by name').to.be.a('function')
+		expect(chain.myAction, 'action by alias').to.be.a('function')
 	})
 
 	it("should handle errors gracefully", function(next){
