@@ -110,13 +110,13 @@ joe.describe('chainy', function(describe,it){
 			.myset('some data')
 			.mycapitalize()
 			.action(function(chainData){
-				expect(chainData, 'data is correct').to.equal('SOME DATA')
+				expect(chainData, 'orig data is correct').to.equal('SOME DATA')
 				return chainData.toLowerCase() // convert back to lowercase
 			})
 
 			.myCapitalize()
 			.action(function(chainData){
-				expect(chainData, 'data is correct').to.equal('SOME DATA')
+				expect(chainData, 'alias data is correct').to.equal('SOME DATA')
 				// no return value, so let's check that the chain data remains upper case
 			})
 
