@@ -1,7 +1,7 @@
 {
   "title": "Chainy Core",
   "name": "chainy-core",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Perhaps the most awesome way of interacting with data using a chainable API",
   "homepage": "https://github.com/chainyjs/chainy-core",
   "license": {
@@ -45,6 +45,7 @@
     "type": "git",
     "url": "http://github.com/chainyjs/chainy-core.git"
   },
+  "browsers": true,
   "engines": {
     "node": ">=0.4"
   },
@@ -65,6 +66,5 @@
   "scripts": {
     "test": "node ./test/chainy-test.js"
   },
-  "main": "./lib/chainy.js",
-  "browsers": true
+  "main": "./lib/chainy.js"
 }

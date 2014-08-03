@@ -134,6 +134,109 @@ joe.describe('chainy', function(describe,it){
 			})
 	})
 
+	it("should work with special arguments", function(next){
+		Chainy.subclass()  // class
+			.addExtension('set', 'action', function(value, newValue){
+				return newValue
+			})
+			.addExtension('myinject', 'action', function(a, b, c, next){
+				try {
+					expect(a).to.equal(1)
+					expect(b).to.deep.equal([2,3,4])
+					expect(c).to.equal(5)
+				} catch (err) {
+					err.message = 'myinject failed: '+err.message
+					throw err
+				}
+				next()
+			})
+			.addExtension('myinjectexpanded', 'action', function(a, b, c, d, e, next){
+				try {
+					expect(a).to.equal(1)
+					expect(b).to.equal(2)
+					expect(c).to.equal(3)
+					expect(d).to.equal(4)
+					expect(e).to.equal(5)
+				} catch (err) {
+					err.message = 'myinjectexpanded failed: '+err.message
+					throw err
+				}
+				next()
+			})
+			.addExtension('myalwaysexpanded', {
+				type: 'action',
+				taskOptions: {
+					args: [1, Chainy.injectExpandedChainDataAsArguments, 5]
+				}
+			}, function(a, b, c, d, e, next){
+				try {
+					expect(a).to.equal(1)
+					expect(b).to.equal(2)
+					expect(c).to.equal(3)
+					expect(d).to.equal(4)
+					expect(e).to.equal(5)
+				} catch (err) {
+					err.message = 'myalwaysexpanded failed: '+err.message
+					throw err
+				}
+				next()
+			})
+			.addExtension('myalwaysexpandedoverwrite', {
+				type: 'action',
+				taskOptions: {
+					args: [1, Chainy.injectExpandedChainDataAsArguments, 5]
+				}
+			}, function(a, b, c, d, e, next){
+				try {
+					expect(a).to.equal(1)
+					expect(b).to.deep.equal([2,3,4])
+					expect(c).to.equal(5)
+				} catch (err) {
+					err.message = 'myalwaysexpandedoverwrite failed: '+err.message
+					throw err
+				}
+				next()
+			})
+
+			.create()  // instance
+			.set([2,3,4])
+			.action('myinject', {args:[1, Chainy.injectChainDataAsArgument, 5]})
+			.action('myinjectexpanded', {args:[1, Chainy.injectExpandedChainDataAsArguments, 5]})
+			.myalwaysexpanded(1, 5)
+			.action('myalwaysexpandedoverwrite', {args:[1, Chainy.injectChainDataAsArgument, 5]})
+			.done(next)
+	})
+
+	it("should work with lying function lengths", function(next){
+		Chainy.subclass()  // class
+			.addExtension('mylie', 'action', function(){
+				arguments[2](null, arguments[1])
+			})
+			.addExtension('myliefixed', {
+				type: 'action',
+				taskOptions: {
+					ambi: false
+				}
+			}, function(){
+				arguments[2](null, arguments[1])
+			})
+
+			.create()  // instance
+			// detect failure
+			.action(function(value, next){
+				this.create().mylie(1).done(function(err){
+					expect(err).to.exist
+					next()
+				})
+			})
+			// work this time
+			.myliefixed(1)
+			.action(function(value){
+				expect(value).to.equal(1)
+			})
+			.done(next)
+	})
+
 	// TODO:
 	// Add tests for different require argument conventions, array, string, split string
 })

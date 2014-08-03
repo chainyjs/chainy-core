@@ -1,5 +1,10 @@
 # History
 
+## v1.5.0 August 3, 2014
+- `chain.action(method, taskOptions)` can now receive an extension name as the method, allowing you to change the behaviour of an existing extension by configuring the options for its execution
+- Removed the internal `prependResultToArguments` task option, and added the public `args` task option. Use `Chainy.injectChainDataAsArgument` and `Chainy.injectExpandedChainDataAsArguments` as special argument items that do what their names suggest.
+- Updated dependencies
+
 ## v1.4.0 July 28, 2014
 - A few changes about how extension inheritance works to make it simpler and more robust
 	- Extensions are now explicitly added to each child class and child instance (instead of implicitly inherited from the prototype tree)
