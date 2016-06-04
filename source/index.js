@@ -4,6 +4,7 @@
 var util = require('util')
 var csextends = require('csextends')
 var TaskGroup = require('taskgroup').TaskGroup
+var taskgroupRunEventName = TaskGroup.subclass ? 'started' : 'pending'  // TaskGroup v4 and v5 compatibility
 
 // Public: Create a new chainy instance, aka create a new chain
 //
@@ -192,7 +193,7 @@ Chainy.prototype.createChainTask = function (method, opts) {
 		var injectNormalIndex = opts.args.indexOf(Chainy.injectChainDataAsArgument)
 		var injectExpandedIndex = opts.args.indexOf(Chainy.injectExpandedChainDataAsArguments)
 		if ( injectNormalIndex !== -1 || injectExpandedIndex !== -1 ) {
-			task.once('started', function () {
+			task.once(taskgroupRunEventName, function () {
 				var data = chain.data
 				if ( injectNormalIndex !== -1 ) {
 					task.config.args =
