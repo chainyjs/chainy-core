@@ -98,6 +98,58 @@ joe.describe('chainy', function (describe, it) {
 		assert.equal(firstAdd, secondAdd) // strict
 	})
 
+	it('should work with special arguments', function (next) {
+		Chainy.create()  // instance
+			.addExtension('set', 'action', function (value, newValue) {
+				return newValue
+			})
+			.addExtension('myinject', 'action', function (a, b, c, next) {
+				assert.equal(a, 1, 'myinject a')
+				assert.deepEqual(b, [2, 3, 4], 'myinject b')
+				assert.equal(c, 5, 'myinject c')
+				next()
+			})
+			.addExtension('myinjectexpanded', 'action', function (a, b, c, d, e, next) {
+				assert.equal(a, 1, 'myinjectexpanded a')
+				assert.equal(b, 2, 'myinjectexpanded b')
+				assert.equal(c, 3, 'myinjectexpanded c')
+				assert.equal(d, 4, 'myinjectexpanded d')
+				assert.equal(e, 5, 'myinjectexpanded e')
+				next()
+			})
+			.addExtension('myalwaysexpanded', {
+				type: 'action',
+				taskOptions: {
+					args: [1, Chainy.injectExpandedChainDataAsArguments, 5]
+				}
+			}, function (a, b, c, d, e, next) {
+				assert.equal(a, 1, 'myalwaysexpanded a')
+				assert.equal(b, 2, 'myalwaysexpanded b')
+				assert.equal(c, 3, 'myalwaysexpanded c')
+				assert.equal(d, 4, 'myalwaysexpanded d')
+				assert.equal(e, 5, 'myalwaysexpanded e')
+				next()
+			})
+			.addExtension('myalwaysexpandedoverwrite', {
+				type: 'action',
+				taskOptions: {
+					args: [1, Chainy.injectExpandedChainDataAsArguments, 5]
+				}
+			}, function (a, b, c, d, e, next) {
+				assert.equal(a, 1, 'myalwaysexpandedoverwrite a')
+				assert.deepEqual(b, [2, 3, 4], 'myalwaysexpandedoverwrite b')
+				assert.equal(c, 5, 'myalwaysexpandedoverwrite c')
+				next()
+			})
+
+			.set([2, 3, 4])
+			.action('myinject', {args: [1, Chainy.injectChainDataAsArgument, 5]})
+			.action('myinjectexpanded', {args: [1, Chainy.injectExpandedChainDataAsArguments, 5]})
+			.myalwaysexpanded(1, 5)
+			.action('myalwaysexpandedoverwrite', {args: [1, Chainy.injectChainDataAsArgument, 5]})
+			.done(next)
+	})
+
 	it('should inherit parent plugins', function (next) {
 		var subclass = Chainy.subclass()  // class
 			.addExtension('myset', 'action', function (value, newValue) {
@@ -133,83 +185,6 @@ joe.describe('chainy', function (describe, it) {
 				assert.equal(parent.klass, subclass, 'parent klass is the subclass')
 				return next()
 			})
-	})
-
-	it('should work with special arguments', function (next) {
-		Chainy.subclass()  // class
-			.addExtension('set', 'action', function (value, newValue) {
-				return newValue
-			})
-			.addExtension('myinject', 'action', function (a, b, c, next) {
-				try {
-					assert.equal(a, 1)
-					assert.deepEqual(b, [2, 3, 4])
-					assert.equal(c, 5)
-				}
-				catch (err) {
-					err.message = 'myinject failed: ' + err.message
-					throw err
-				}
-				next()
-			})
-			.addExtension('myinjectexpanded', 'action', function (a, b, c, d, e, next) {
-				try {
-					assert.equal(a, 1)
-					assert.equal(b, 2)
-					assert.equal(c, 3)
-					assert.equal(d, 4)
-					assert.equal(e, 5)
-				}
-				catch (err) {
-					err.message = 'myinjectexpanded failed: ' + err.message
-					throw err
-				}
-				next()
-			})
-			.addExtension('myalwaysexpanded', {
-				type: 'action',
-				taskOptions: {
-					args: [1, Chainy.injectExpandedChainDataAsArguments, 5]
-				}
-			}, function (a, b, c, d, e, next) {
-				try {
-					assert.equal(a, 1)
-					assert.equal(b, 2)
-					assert.equal(c, 3)
-					assert.equal(d, 4)
-					assert.equal(e, 5)
-				}
-				catch (err) {
-					err.message = 'myalwaysexpanded failed: ' + err.message
-					throw err
-				}
-				next()
-			})
-			.addExtension('myalwaysexpandedoverwrite', {
-				type: 'action',
-				taskOptions: {
-					args: [1, Chainy.injectExpandedChainDataAsArguments, 5]
-				}
-			}, function (a, b, c, d, e, next) {
-				try {
-					assert.equal(a, 1)
-					assert.deepEqual(b, [2, 3, 4])
-					assert.equal(c, 5)
-				}
-				catch (err) {
-					err.message = 'myalwaysexpandedoverwrite failed: ' + err.message
-					throw err
-				}
-				next()
-			})
-
-			.create()  // instance
-			.set([2, 3, 4])
-			.action('myinject', {args: [1, Chainy.injectChainDataAsArgument, 5]})
-			.action('myinjectexpanded', {args: [1, Chainy.injectExpandedChainDataAsArguments, 5]})
-			.myalwaysexpanded(1, 5)
-			.action('myalwaysexpandedoverwrite', {args: [1, Chainy.injectChainDataAsArgument, 5]})
-			.done(next)
 	})
 
 	it('should work with lying function lengths', function (next) {
