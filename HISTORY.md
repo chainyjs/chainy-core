@@ -1,6 +1,6 @@
 # History
 
-## v1.5.1 2016 June 2
+## v1.5.1 2016 June 4
 - Updated internal conventions
 - Updated dependencies
 
