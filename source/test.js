@@ -206,7 +206,7 @@ joe.describe('chainy', function (describe, it) {
 			// detect failure
 			.action(function (value, next) {
 				this.create().mylie(1).done(function (err) {
-					assert.errorEqual(err, 'arguments[2] is not a function')
+					assert.errorEqual(err, 'is not a function')
 					next()
 				})
 			})
