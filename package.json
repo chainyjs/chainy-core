@@ -64,7 +64,8 @@
   "editions": [
     {
       "description": "Source + ES5 + Require",
-      "entry": "lib/chainy.js",
+      "entry": "source/index.js",
+      "directory": "source",
       "syntaxes": [
         "javascript",
         "es5",
@@ -72,11 +73,11 @@
       ]
     }
   ],
-  "main": "lib/chainy.js",
-  "browser": "lib/chainy.js",
+  "main": "source/index.js",
+  "browser": "source/index.js",
   "scripts": {
     "setup": "npm install",
-    "clean": "rm -Rf ./docs ./es5",
+    "clean": "rm -Rf ./docs",
     "compile": "echo 'no compile necessary'",
     "meta": "npm run meta:projectz",
     "meta:projectz": "projectz compile",
@@ -86,17 +87,17 @@
     "release:tag": "git tag v$npm_package_version -a",
     "release:push": "git push origin master && git push origin --tags",
     "pretest": "npm run test:eslint",
-    "test:eslint": "eslint ./lib ./test",
-    "test": "node --harmony ./test/chainy-test.js"
+    "test:eslint": "eslint ./source",
+    "test": "node --harmony ./source/test.js"
   },
   "dependencies": {
     "csextends": "^1.0.3",
-    "taskgroup": "^4.3.1"
+    "taskgroup": "^5.0.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
     "eslint": "^2.11.1",
-    "joe": "^1.6.0",
+    "joe": "^1.8.0",
     "joe-reporter-console": "^1.2.1",
     "projectz": "^1.1.5"
   }

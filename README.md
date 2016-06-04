@@ -52,8 +52,8 @@ Perhaps the most awesome way of interacting with data using a chainable API
 
 <p>This package is published with the following editions:</p>
 
-<ul><li><code>chainy-core</code> aliases <code>chainy-core/lib/chainy.js</code></li>
-<li><code>chainy-core/lib/chainy.js</code> is Source + ES5 + <a href="https://nodejs.org/dist/latest-v5.x/docs/api/modules.html" title="Node/CJS Modules">Require</a></li></ul>
+<ul><li><code>chainy-core</code> aliases <code>chainy-core/source/index.js</code></li>
+<li><code>chainy-core/source/index.js</code> is Source + ES5 + <a href="https://nodejs.org/dist/latest-v5.x/docs/api/modules.html" title="Node/CJS Modules">Require</a></li></ul>
 
 <!-- /INSTALL -->
 
