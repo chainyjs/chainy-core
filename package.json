@@ -77,6 +77,7 @@
   "scripts": {
     "setup": "npm install",
     "clean": "rm -Rf ./docs ./es5",
+    "compile": "echo 'no compile necessary'",
     "meta": "npm run meta:projectz",
     "meta:projectz": "projectz compile",
     "prepare": "npm run test && npm run meta",
