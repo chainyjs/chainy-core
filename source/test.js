@@ -1,8 +1,8 @@
 /* eslint no-var:0, max-params:0, no-unused-vars:0, prefer-rest-params:0, no-unused-expressions:0 */
 
 // Import
-var expect = require('chai').expect,
-	joe = require('joe')
+var assert = require('assert-helpers')
+var joe = require('joe')
 
 // Test Chainy
 joe.describe('chainy', function (describe, it) {
@@ -16,7 +16,7 @@ joe.describe('chainy', function (describe, it) {
 		catch (_err) {
 			err = _err
 		}
-		expect(err && err.message).to.contain('frozen')
+		assert.errorEqual(err, 'frozen')
 	})
 
 	it('should pass when attempting to extend a child class', function () {
@@ -27,8 +27,8 @@ joe.describe('chainy', function (describe, it) {
 			.addExtension('myaction', 'action', extension)
 			.create()
 
-		expect(chain.myutility, 'utility by name').to.equal(extension)
-		expect(chain.myaction, 'action by name').to.be.a('function')
+		assert.equal(chain.myutility, extension, 'utility by name')
+		assert.equal(typeof chain.myaction, 'function', 'action by name')
 	})
 
 	it('should handle aliases correctly', function () {
@@ -39,10 +39,10 @@ joe.describe('chainy', function (describe, it) {
 			.addExtension('myaction', ['myAction'], 'action', extension)
 			.create()
 
-		expect(chain.myutility, 'utility by name').to.equal(extension)
-		expect(chain.myUtility, 'utility by alias').to.equal(extension)
-		expect(chain.myaction, 'action by name').to.be.a('function')
-		expect(chain.myAction, 'action by alias').to.be.a('function')
+		assert.equal(chain.myutility, extension, 'utility by name')
+		assert.equal(chain.myUtility, extension, 'utility by alias')
+		assert.equal(typeof chain.myaction, 'function', 'action by name')
+		assert.equal(typeof chain.myAction, 'function', 'action by alias')
 	})
 
 	it('should handle errors gracefully', function (next) {
@@ -52,9 +52,9 @@ joe.describe('chainy', function (describe, it) {
 			})
 			.myoops()
 			.done(function (err, chainData) {
-				expect(chain).to.equal(this)
-				expect(err.message).to.equal('deliberate failure')
-				expect(chainData).to.equal(null)
+				assert.equal(chain, this, 'done this')
+				assert.errorEqual(err, 'deliberate failure', 'done error')
+				assert.equal(chainData, null, 'done chain data')
 				return next()
 			})
 	})
@@ -66,10 +66,10 @@ joe.describe('chainy', function (describe, it) {
 			})
 			.myset('some data')
 			.done(function (err, chainData) {
-				expect(chain).to.equal(this)
-				expect(err).to.equal(null)
-				expect(chainData).to.equal('some data')
-				expect(chainData).to.equal(this.data)
+				assert.equal(chain, this)
+				assert.errorEqual(err, null)
+				assert.equal(chainData, 'some data')
+				assert.equal(chainData, this.data)
 				return next()
 			})
 	})
@@ -79,8 +79,8 @@ joe.describe('chainy', function (describe, it) {
 			.subclass().subclass().subclass().require('done')
 			.create().require('done')
 			.done(function (err) {
-				expect(chain).to.equal(this)
-				expect(err).to.equal(null)
+				assert.equal(chain, this)
+				assert.errorEqual(err, null)
 				return next()
 			})
 	})
@@ -94,8 +94,8 @@ joe.describe('chainy', function (describe, it) {
 		var firstAdd = chain.myset
 		chain.addExtension('myset', 'action', extension)
 		var secondAdd = chain.myset
-		expect(firstAdd).to.be.a('function')
-		expect(firstAdd).to.equal(secondAdd) // strict
+		assert.equal(typeof firstAdd, 'function')
+		assert.equal(firstAdd, secondAdd) // strict
 	})
 
 	it('should inherit parent plugins', function (next) {
@@ -111,26 +111,26 @@ joe.describe('chainy', function (describe, it) {
 			.myset('some data')
 			.mycapitalize()
 			.action(function (chainData) {
-				expect(chainData, 'orig data is correct').to.equal('SOME DATA')
+				assert.equal(chainData, 'SOME DATA', 'orig data is correct')
 				return chainData.toLowerCase() // convert back to lowercase
 			})
 
 			.myCapitalize()
 			.action(function (chainData) {
-				expect(chainData, 'alias data is correct').to.equal('SOME DATA')
+				assert.equal(chainData, 'SOME DATA', 'alias data is correct')
 				// no return value, so let's check that the chain data remains upper case
 			})
 
 			.done(function (err, chainData) {
-				expect(err, 'no error').to.equal(null)
-				expect(chainData, 'data is correct').to.equal('SOME DATA')
-				expect(chainData, 'callback data is this.data').to.equal(this.data)
+				assert.errorEqual(err, null, 'no error')
+				assert.equal(chainData, 'SOME DATA', 'data is correct')
+				assert.equal(chainData, this.data, 'callback data is this.data')
 
-				expect(child).to.equal(this)
-				expect(child.parent, 'child parent is the parent chain instance').to.equal(parent)
-				expect(parent.parent, 'parent parent doens\'t exist').to.equal(null)
-				// expect(child.klass, 'child klass is the subclass').to.equal(subclass)
-				// expect(parent.klass, 'parent klass is the subclass').to.equal(subclass)
+				assert.equal(child, this)
+				assert.equal(child.parent, parent, 'child parent is the parent chain instance')
+				assert.equal(parent.parent, null,  'parent parent doens\'t exist')
+				assert.equal(child.klass, subclass, 'child klass is the subclass')
+				assert.equal(parent.klass, subclass, 'parent klass is the subclass')
 				return next()
 			})
 	})
@@ -142,9 +142,9 @@ joe.describe('chainy', function (describe, it) {
 			})
 			.addExtension('myinject', 'action', function (a, b, c, next) {
 				try {
-					expect(a).to.equal(1)
-					expect(b).to.deep.equal([2, 3, 4])
-					expect(c).to.equal(5)
+					assert.equal(a, 1)
+					assert.deepEqual(b, [2, 3, 4])
+					assert.equal(c, 5)
 				}
 				catch (err) {
 					err.message = 'myinject failed: ' + err.message
@@ -154,11 +154,11 @@ joe.describe('chainy', function (describe, it) {
 			})
 			.addExtension('myinjectexpanded', 'action', function (a, b, c, d, e, next) {
 				try {
-					expect(a).to.equal(1)
-					expect(b).to.equal(2)
-					expect(c).to.equal(3)
-					expect(d).to.equal(4)
-					expect(e).to.equal(5)
+					assert.equal(a, 1)
+					assert.equal(b, 2)
+					assert.equal(c, 3)
+					assert.equal(d, 4)
+					assert.equal(e, 5)
 				}
 				catch (err) {
 					err.message = 'myinjectexpanded failed: ' + err.message
@@ -173,11 +173,11 @@ joe.describe('chainy', function (describe, it) {
 				}
 			}, function (a, b, c, d, e, next) {
 				try {
-					expect(a).to.equal(1)
-					expect(b).to.equal(2)
-					expect(c).to.equal(3)
-					expect(d).to.equal(4)
-					expect(e).to.equal(5)
+					assert.equal(a, 1)
+					assert.equal(b, 2)
+					assert.equal(c, 3)
+					assert.equal(d, 4)
+					assert.equal(e, 5)
 				}
 				catch (err) {
 					err.message = 'myalwaysexpanded failed: ' + err.message
@@ -192,9 +192,9 @@ joe.describe('chainy', function (describe, it) {
 				}
 			}, function (a, b, c, d, e, next) {
 				try {
-					expect(a).to.equal(1)
-					expect(b).to.deep.equal([2, 3, 4])
-					expect(c).to.equal(5)
+					assert.equal(a, 1)
+					assert.deepEqual(b, [2, 3, 4])
+					assert.equal(c, 5)
 				}
 				catch (err) {
 					err.message = 'myalwaysexpandedoverwrite failed: ' + err.message
@@ -227,17 +227,19 @@ joe.describe('chainy', function (describe, it) {
 			})
 
 			.create()  // instance
+
 			// detect failure
 			.action(function (value, next) {
 				this.create().mylie(1).done(function (err) {
-					expect(err).to.exist
+					assert.errorEqual(err, 'arguments[2] is not a function')
 					next()
 				})
 			})
+
 			// work this time
 			.myliefixed(1)
 			.action(function (value) {
-				expect(value).to.equal(1)
+				assert.equal(value, 1)
 			})
 			.done(next)
 	})

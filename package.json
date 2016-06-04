@@ -95,7 +95,7 @@
     "taskgroup": "^5.0.0"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
+    "assert-helpers": "^4.4.0",
     "eslint": "^2.11.1",
     "joe": "^1.8.0",
     "joe-reporter-console": "^1.2.1",
