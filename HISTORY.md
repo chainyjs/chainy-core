@@ -1,5 +1,10 @@
 # History
 
+## v1.6.0 2016 June 4
+- Updated internal conventions
+- Updated dependencies
+	- Now supports TaskGroup v5 and TaskGroup v4
+
 ## v1.5.1 2016 June 4
 - Updated internal conventions
 - Updated dependencies
